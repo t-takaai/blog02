@@ -33,7 +33,7 @@ router.get('/:id/edit', function(req, res, next) {
   res.render('edit', { post: posts[req.params.id], id: req.params.id});
 });
 
-router.post('/:id', function(req, res, next) {
+router.put('/:id', function(req, res, next) {
   console.log('this is router.post');
   posts[req.body.id] = {
     title: req.body.title,

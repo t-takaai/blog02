@@ -28,15 +28,25 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // override with POST having ?_method=DELETE
-app.use(methodOverride('_method'));
+// app.use(methodOverride('_method'));
+// method の変更処理を自前で書く方法にする
+app.use( methodOverride(function(req, res){
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    var method = req.body._method;
+    delete req.body._method;
+    return method;
+  }
+}) );
+
 
 // CSRF
-app.use(expressSession({secret: 'fdsldeeen'}));
-app.use(csrf());
-app.use(function(req, res, next) {
-    res.locals.csrftoken = req.csrfToken();
-    next();
-});
+// app.use(expressSession({secret: 'fdsldeeen'}));
+// app.use(csrf());
+// app.use(function(req, res, next) {
+//     res.locals.csrftoken = req.csrfToken();
+//     next();
+// });
 
 // app.use('/', routes);
 app.use('/', posts);
